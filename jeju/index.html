@@ -53,11 +53,27 @@
     <div class="col-sm-8">
       <h1> Jeju </h1>
       <div id="map" style="width:100%;height:400px;"></div>
-    <script>
 
-    
-      var map = new naver.maps.Map('map');
-      var myaddress = '제주도';// 도로명 주소나 지번 주소만 가능 (건물명 불가!!!!)
+      <script id="data">//경로로 표시할 배열(array)
+      var polylinePath = [ 
+      new naver.maps.LatLng(33.5104135,126.4891594),//공항
+      new naver.maps.LatLng(33.4770982,126.3580263),//호텔
+      new naver.maps.LatLng(33.4628964,126.3069268)//,//몽상드 애월
+      //new naver.maps.LatLng(33.4922709,126.4791729)
+      ]
+        
+      </script>
+
+    <script>
+      //맵 옵션 zoom 맵을 얼마정도의 크기로 볼지
+      var mapOptions = {
+        zoom: 6 //맵 크기 
+      }
+      var map = new naver.maps.Map('map',mapOptions);
+
+      
+
+      var myaddress = '제주';// 도로명 주소나 지번 주소만 가능 (건물명 불가!!!!)
       naver.maps.Service.geocode({address: myaddress}, function(status, response) {
           if (status !== naver.maps.Service.Status.OK) {
               return alert(myaddress + '의 검색 결과가 없거나 기타 네트워크 에러');
@@ -68,11 +84,13 @@
           // 첫번째 검색 결과 좌표: result.items[0].point.y, result.items[0].point.x
           var myaddr = new naver.maps.Point(result.items[0].point.x, result.items[0].point.y);
           map.setCenter(myaddr); // 검색된 좌표로 지도 이동
+
           // 마커 표시
           var marker = new naver.maps.Marker({
             position: myaddr,
             map: map
           });
+
           // 마커 클릭 이벤트 처리
           naver.maps.Event.addListener(marker, "click", function(e) {
             if (infowindow.getMap()) {
@@ -81,12 +99,26 @@
                 infowindow.open(map, marker);
             }
           });
+
           // 마크 클릭시 인포윈도우 오픈
           var infowindow = new naver.maps.InfoWindow({
               content: '<h4> [네이버 개발자센터]</h4><a href="https://developers.naver.com" target="_blank"><img src="https://developers.naver.com/inc/devcenter/images/nd_img.png"></a>'
           });
       });
-      
+
+      //아까 배열을 이용해 라인 그리기
+      var polyline = new naver.maps.Polyline({
+        path:polylinePath,  //선 위치 변수배열
+        strokeColor: '#FF0000', //선 색
+        strokeOpacity: 0.8, //선 투명도 0~1
+        strokeWeight: 3, //선 두께
+        map: map         //오버레이할 지도
+      });
+      var marker = new naver.maps.Marker({
+        position: polylinePath[0],
+        position: polylinePath[polylinePath.length-1],// 마크 표시할 배열중 원소
+        map:map
+      });
       </script>
 
     </div>
