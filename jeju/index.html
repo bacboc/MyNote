@@ -52,26 +52,27 @@
     <div class="col-sm-2"></div>
     <div class="col-sm-8">
       <h1> Jeju </h1>
+
+      <!-- 맵을 표시할 태그  -->
       <div id="map" style="width:100%;height:400px;"></div>
 
       <script id="data">//경로로 표시할 배열(array)
       var polylinePath = [ 
-      new naver.maps.LatLng(33.5104135,126.4891594),//공항
       new naver.maps.LatLng(33.4770982,126.3580263),//호텔
-      new naver.maps.LatLng(33.4628964,126.3069268)//,//몽상드 애월
+      new naver.maps.LatLng(33.4601539,126.3209932),
+      new naver.maps.LatLng(33.459957,126.3132361),
+      new naver.maps.LatLng(33.4628964,126.3069268),//몽상드 애월
+      new naver.maps.LatLng(33.4342322,126.289106)
       //new naver.maps.LatLng(33.4922709,126.4791729)
       ]
         
       </script>
 
     <script>
-      //맵 옵션 zoom 맵을 얼마정도의 크기로 볼지
-      var mapOptions = {
-        zoom: 6 //맵 크기 
-      }
-      var map = new naver.maps.Map('map',mapOptions);
-
-      
+      //맵 객체 생성 
+      var map = new naver.maps.Map('map',{
+        zoom: 6 //맵 크기
+      });
 
       var myaddress = '제주';// 도로명 주소나 지번 주소만 가능 (건물명 불가!!!!)
       naver.maps.Service.geocode({address: myaddress}, function(status, response) {
@@ -86,11 +87,12 @@
           map.setCenter(myaddr); // 검색된 좌표로 지도 이동
 
           // 마커 표시
+          
           var marker = new naver.maps.Marker({
             position: myaddr,
             map: map
           });
-
+          
           // 마커 클릭 이벤트 처리
           naver.maps.Event.addListener(marker, "click", function(e) {
             if (infowindow.getMap()) {
@@ -115,10 +117,38 @@
         map: map         //오버레이할 지도
       });
       var marker = new naver.maps.Marker({
-        position: polylinePath[0],
         position: polylinePath[polylinePath.length-1],// 마크 표시할 배열중 원소
         map:map
       });
+      var marker = new naver.maps.Marker({
+        position: polylinePath[0],// 마크 표시할 배열중 원소
+        map:map
+      });
+      var marker = new naver.maps.Marker({
+        position: polylinePath[1],// 마크 표시할 배열중 원소
+        map:map
+      });
+      var marker = new naver.maps.Marker({
+        position: polylinePath[2],// 마크 표시할 배열중 원소
+        map:map
+      });
+      var marker1 = new naver.maps.Marker({
+        position: polylinePath[3],// 마크 표시할 배열중 원소
+        map:map
+      });
+      // 마커 클릭 이벤트 처리
+          naver.maps.Event.addListener(marker, "click", function(e) {
+            if (infowindow.getMap()) {
+                infowindow.close();
+            } else {
+                infowindow.open(map, marker1);
+            }
+          });
+
+          // 마크 클릭시 인포윈도우 오픈
+          var infowindow = new naver.maps.InfoWindow({
+              content: '<h4> [몽상드 애월]</h4><a href="https://www.google.com/maps/place/몽상드애월/@33.4628964,126.3091208,15z/data=!4m5!3m4!1s0x0:0x29f8a036802d64aa!8m2!3d33.4628964!4d126.3091208" target="_blank"><img src="http://img.tripnbuy.com/photo/J7XX8NmuBDFH7Aw9OJQ6UbaFSPTHqlvYIMG_2971.jpg" width="80" height ="60"></a>'
+          });
       </script>
 
     </div>
