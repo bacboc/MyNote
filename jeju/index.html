@@ -63,9 +63,7 @@
       new naver.maps.LatLng(33.459957,126.3132361),
       new naver.maps.LatLng(33.4628964,126.3069268),//몽상드 애월
       new naver.maps.LatLng(33.4342322,126.289106)
-      //new naver.maps.LatLng(33.4922709,126.4791729)
       ]
-        
       </script>
 
     <script>
@@ -108,7 +106,7 @@
           });
       });
 
-      //아까 배열을 이용해 라인 그리기
+      //배열을 이용해 라인 그리기
       var polyline = new naver.maps.Polyline({
         path:polylinePath,  //선 위치 변수배열
         strokeColor: '#FF0000', //선 색
@@ -132,23 +130,23 @@
         position: polylinePath[2],// 마크 표시할 배열중 원소
         map:map
       });
+      // 마커 표시
       var marker1 = new naver.maps.Marker({
-        position: polylinePath[3],// 마크 표시할 배열중 원소
+        position: polylinePath[3],
         map:map
       });
       // 마커 클릭 이벤트 처리
-          naver.maps.Event.addListener(marker, "click", function(e) {
-            if (infowindow.getMap()) {
-                infowindow.close();
-            } else {
-                infowindow.open(map, marker1);
-            }
-          });
-
-          // 마크 클릭시 인포윈도우 오픈
-          var infowindow = new naver.maps.InfoWindow({
+        naver.maps.Event.addListener(marker, "click", function(e) {
+          if (infowindow.getMap()) {
+              infowindow.close();
+          } else {
+              infowindow.open(map, marker1);
+          }
+        });
+        // 마크 클릭시 인포윈도우 오픈
+        var infowindow = new naver.maps.InfoWindow({
               content: '<h4> [몽상드 애월]</h4><a href="https://www.google.com/maps/place/몽상드애월/@33.4628964,126.3091208,15z/data=!4m5!3m4!1s0x0:0x29f8a036802d64aa!8m2!3d33.4628964!4d126.3091208" target="_blank"><img src="http://img.tripnbuy.com/photo/J7XX8NmuBDFH7Aw9OJQ6UbaFSPTHqlvYIMG_2971.jpg" width="80" height ="60"></a>'
-          });
+        });
       </script>
 
     </div>
