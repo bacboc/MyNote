@@ -1,0 +1,77 @@
+//백준2206 [벽 부수고 이동하기]
+// 각 노드마다 상태가 있는 BFS
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <string>
+
+using namespace std;
+int N, M;
+int map[1000][1000];
+int dx[]={0,0,1,-1};
+int dy[]={1,-1,0,0};
+
+struct node{
+    int x; int y; bool flag; int dis;
+    node(){};
+    node(int x, int y, int dis,bool flag): x(x), y(y), dis(dis), flag(flag) {}
+};
+bool visited[1000][1000][2];
+int sol=0;
+queue<node> q;
+
+void bfs(){
+    node temp;
+    q.push(node(0,0,0,true));
+    while(!q.empty()){
+        temp = q.front();
+        q.pop();
+        if(temp.y == N-1 && temp.x == M-1){
+            sol=temp.dis+1;
+            break;
+        }
+        //벽 부시는 것은 0 일때 가능 1일때 불가능 (visited)
+        for(int d=0; d<4; d++){
+            if(0<=temp.x+dx[d] && temp.x+dx[d] < M && 0<=temp.y+dy[d] && temp.y+dy[d] <N){
+                if(temp.flag){//부실 기회 O
+                    if(map[temp.y+dy[d]][temp.x+dx[d]]==1&&!visited[temp.y+dy[d]][temp.x+dx[d]][1]){
+                        visited[temp.y+dy[d]][temp.x+dx[d]][1]=true;
+                        q.push(node(temp.x+dx[d],temp.y+dy[d],temp.dis+1,false));
+                    }else if(map[temp.y+dy[d]][temp.x+dx[d]]==0
+                             && !visited[temp.y+dy[d]][temp.x+dx[d]][0]){
+                        visited[temp.y+dy[d]][temp.x+dx[d]][0]=true;
+                        q.push(node(temp.x+dx[d],temp.y+dy[d],temp.dis+1,true));
+                    }
+                }else{
+                    if(map[temp.y+dy[d]][temp.x+dx[d]]==0
+                       && !visited[temp.y+dy[d]][temp.x+dx[d]][1]){
+                        visited[temp.y+dy[d]][temp.x+dx[d]][1]=true;
+                        q.push(node(temp.x+dx[d],temp.y+dy[d],temp.dis+1,false));
+                    }
+                }
+            }
+        }
+    }
+    
+}
+
+int main(){
+    cin >> N >>M;
+    int num;
+    for(int r=0; r<N; r++){
+        for(int c=0; c<M; c++){
+            scanf("%1d",&num);
+            map[r][c]=num;
+            visited[r][c][0]=false;
+            visited[r][c][1]=false;
+        }
+    }
+        visited[0][0][0] =true;
+    bfs();
+    if(sol==0){
+        sol=-1;
+    }
+    cout << sol;
+    
+    return 0;
+}
