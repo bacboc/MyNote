@@ -1,0 +1,59 @@
+//백준15685 드래곤 커브
+//시뮬레이션
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+int map[101][101]={0,};
+// 우 상 좌 하
+int dx[] = {1,0,-1,0};
+int dy[] = {0,-1,0,1};
+int sol=0;
+vector<int> DIR;
+
+void dirF(int D, int G){
+    DIR.push_back(D);
+    int size;
+    for(int g=0; g<G; g++){
+        size =(int)DIR.size();
+        for(int k=size-1; k >= 0; k--){
+            DIR.push_back( (DIR[k]+1)%4 );
+        }
+    }
+    
+}
+void draw(int X, int Y){
+    map[Y][X]=1;
+    for(int d=0; d <DIR.size(); d++){
+        if(0 <=Y+dy[DIR[d]] && Y+dy[DIR[d]]<101 &&
+           0<= X+dx[DIR[d]] && X+dx[DIR[d]]<101){
+            map[Y+dy[DIR[d]]][X+dx[DIR[d]]] = 1;
+            X=X+dx[DIR[d]];
+            Y=Y+dy[DIR[d]];
+        }
+    }
+}
+
+int main(){
+    int T;
+    int X,Y,D,G;
+    cin >> T;
+    for(int t=0; t< T; t++){
+        cin>>X>>Y>>D>>G;
+        dirF(D,G);
+        draw(X,Y);
+        DIR.clear();
+    }
+    //solution
+    for(int r=0; r< 100 ; r++){
+        for(int c=0; c<100; c++){
+            if(map[r][c]==1 && map[r][c+1]==1
+               &&map[r+1][c]==1 && map[r+1][c+1]==1){
+                sol ++;
+            }
+        }
+    }
+    cout << sol;
+    return 0;
+}
