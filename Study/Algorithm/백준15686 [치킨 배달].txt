@@ -1,0 +1,59 @@
+//백준15686 치킨 배달
+// DFS 순열조합 문제
+
+#include<iostream>
+#include<vector>
+using namespace std;
+int N, M;
+int map[50][50];
+int sol=987654321;
+vector<pair<int,int>> CHICKEN;
+vector<pair<int,int>> HOME;
+vector<pair<int,int>> MC;
+int cal(){
+    int sum = 0;
+    int x,y;
+    int dis=987654321;
+    for(int i=0; i<HOME.size(); i++){
+        y = HOME[i].first;
+        x = HOME[i].second;
+        for(int k=0; k < MC.size(); k++){
+            dis = min(dis, abs(y-MC[k].first)+abs(x-MC[k].second));
+            if(dis == 1)
+                break;
+        }
+        sum += dis;
+        dis=987654321;
+    }
+    return sum;
+}
+void dfs(int selected, int depth){
+    if(depth <= CHICKEN.size()){
+        if(selected == M){
+            //sol
+            sol = min(sol, cal());
+        }else{
+            MC.push_back(CHICKEN[depth]); // 선택
+            dfs(selected+1,depth+1);
+            MC.pop_back();   // 선택 해제
+            dfs(selected,depth+1);
+        }
+    }
+}
+
+int main(){
+    cin >> N >> M;
+    for(int r=0; r<N; r++){
+        for(int c=0; c<N; c++){
+            cin >> map[r][c];
+            if(map[r][c] == 2){
+                CHICKEN.push_back(make_pair(r,c)); // y, x
+            }else if(map[r][c] ==1){
+                HOME.push_back(make_pair(r,c)); // y, x
+            }
+        }
+    }
+    dfs(0,0);
+    cout << sol;
+    return 0;
+}
