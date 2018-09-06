@@ -1,0 +1,133 @@
+//백준13460 구슬 탈출2
+// DFS사용 
+
+#include<iostream>
+#include<string>
+#include<vector>
+#include<algorithm>
+using namespace std;
+int N, M;
+int map[11][11];
+int dx[]={0,0,-1,1}; // dir
+int dy[]={-1,1,0,0};
+int sol=1000;
+struct node{
+    int x, y;
+    node(){}
+    node(int x, int y) : x(x), y(y) {}
+};
+bool move(node* temp, int dir,int type){ //false일때 R 탈출 / type: R-1, B-2
+    map[temp->y][temp->x]=0;
+    
+    while(true){
+        if(0<=temp->x+dx[dir] && temp->x+dx[dir] <M && 0<=temp->y+dy[dir] && temp->y+dy[dir] <N){
+            if(map[temp->y+dy[dir]][temp->x+dx[dir]]==0){
+                temp->x+=dx[dir];
+                temp->y+=dy[dir];
+            }else if(map[temp->y+dy[dir]][temp->x+dx[dir]]==3){
+                return false;
+            }else{
+                if(type==1){
+                    map[temp->y][temp->x] = 1;
+                }else if(type == 2){
+                    map[temp->y][temp->x] = 2;
+                }
+                return true;
+            }
+        }
+    }
+    return true;
+};
+bool compareRB(node tempR, node tempB,int dir){ // R이 먼저 시작해야 하면 true
+    if(dir==0){ // 상
+        if(tempR.y <= tempB.y)
+            return true;
+    }else if(dir ==1){ //하
+        if(tempR.y >= tempB.y)
+            return true;
+    }else if(dir ==2){ //좌
+        if(tempR.x <= tempB.x)
+            return true;
+    }else if(dir ==3){ //우
+        if(tempR.x >= tempB.x)
+            return true;
+    }
+    return false;
+};
+
+void dfs(node R, node B, int depth){
+    bool flagR=true;
+    bool flagB=true;
+    
+    if(depth < 10){
+        //processing
+        for(int d=0; d<4; d++){
+            node tempR=R;
+            node tempB=B;
+            if(compareRB(tempR, tempB, d)){
+                flagR=move(&R,d,1);
+                flagB=move(&B,d,2);
+            }else{
+                flagB=move(&B,d,2);
+                flagR=move(&R,d,1);
+            }
+            
+            //sol
+            if(!flagB && !flagR){ // 동시에
+                if(sol > 100)
+                    sol = -1;
+            }else if(!flagB){   // 파란색 먼저
+                if(sol > 100)
+                    sol = -1;
+            }else if(!flagR){   // 빨간색 먼저
+                if(sol==-1 || 100<sol){
+                    sol = depth+1;
+                }else if(sol <100){
+                    sol = min(sol,depth+1);
+                }
+            }else{
+                dfs(R,B,depth+1);
+            }
+            //recover
+            map[B.y][B.x]=0;
+            map[R.y][R.x]=0;
+            B=tempB;
+            R=tempR;
+            map[B.y][B.x]=2;
+            map[R.y][R.x]=1;
+        }
+    }else{
+        if(sol > 100)
+            sol = -1;
+    }
+    
+}
+
+int main(){
+    cin >> N >> M;
+    string inS;
+    node R, B;
+    for(int r=0; r<N; r++){
+        cin >> inS;
+        for(int c=0; c<M; c++){
+            if( inS[c] == '#'){
+                map[r][c] = 7;
+            }else if( inS[c] == '.'){
+                map[r][c] = 0;
+            }else if( inS[c] == 'R'){
+                map[r][c] = 1;
+                R.x=c;
+                R.y=r;
+            }else if( inS[c] == 'B'){
+                map[r][c] = 2;
+                B.x=c;
+                B.y=r;
+            }else if( inS[c] == 'O'){
+                map[r][c] = 3;
+            }
+        }
+    }
+    dfs(R,B,0);
+    cout << sol;
+    return 0;
+}
