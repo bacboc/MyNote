@@ -1,0 +1,49 @@
+// 백준1987 [알파벳]
+// DFS
+#include<iostream>
+#include<algorithm>
+#include<string>
+#include<vector>
+using namespace std;
+int R, C;
+int map[21][21];
+bool visited[21][21];
+bool vis[50];
+int dx[]={0,0,-1,1};
+int dy[]={-1,1,0,0};
+int max_num=-1;
+
+void dfs(int x, int y,int depth){
+    //sol
+    max_num=max(depth, max_num);
+    for(int dir=0; dir<4; dir++){
+        if(0<=x+dx[dir] &&x+dx[dir]< C && 0<=y+dy[dir] &&y+dy[dir]<R){
+            if(visited[y+dy[dir]][x+dx[dir]]==false && vis[map[y+dy[dir]][x+dx[dir]]]==false){
+                visited[y+dy[dir]][x+dx[dir]]=true;
+                vis[map[y+dy[dir]][x+dx[dir]]]=true;
+                dfs(x+dx[dir],y+dy[dir],depth+1);
+                visited[y+dy[dir]][x+dx[dir]]=false;
+                vis[map[y+dy[dir]][x+dx[dir]]]=false;
+            }
+        }
+    }
+
+}
+int main(){
+    cin >>R >>C;
+    string temp_str;
+    for(int r=0; r< R; r++){
+        cin >> temp_str;
+        for(int c=0; c<C; c++){
+            map[r][c] = (int)temp_str[c]- (int)'A';
+        }
+    }
+    
+    visited[0][0] = true;
+    vis[map[0][0]]=true;
+    
+    dfs(0,0,1);
+    
+    cout << max_num;
+    return 0;
+}
