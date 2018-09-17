@@ -1,0 +1,50 @@
+// SW expert[격자판의 숫자 이어 붙이기]
+// dfs + map 
+#include<iostream>
+#include<vector>
+#include<string>
+#include<cmath>
+#include<algorithm>
+#include<map>
+using namespace std;
+
+int Map[4][4];
+int dx[]={0,0,-1,1};
+int dy[]={-1,1,0,0};
+vector<int> S;
+map<int,int> M;
+
+void dfs(int x, int y, int num ,int depth){
+    if(depth==6){
+        M.insert(pair<int,int> (num,0) );
+    }else{
+        for(int d=0; d<4; d++){
+            if(0<=x+dx[d]&&x+dx[d]<4&& 0<=y+dy[d]&&y+dy[d]<4 ){
+                dfs(x+dx[d],y+dy[d],num*10+Map[y+dy[d]][x+dx[d]],depth+1);
+            }
+        }
+    }
+}
+
+int main(){
+    int T;
+    cin >> T;
+    for(int t=0; t<T; t++){
+        for(int r=0; r<4; r++){
+            for(int c=0; c<4; c++){
+                cin >> Map[r][c];
+            }
+        }
+        for(int r=0; r<4; r++){
+            for(int c=0; c<4; c++){
+                dfs(c,r,Map[r][c],0);
+            }
+        }
+        S.push_back((int)M.size());
+        M.clear();
+    }
+    for(int s=0; s<S.size(); s++)
+        cout <<"#"<<s+1<<" "<<S[s]<<"\n";
+    
+    return 0;
+}

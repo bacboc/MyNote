@@ -1,0 +1,90 @@
+//백준 [보물섬]
+// BFS
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<string>
+#include<queue>
+using namespace std;
+struct node{
+    int x, y,d;
+    node(){};
+    node(int x, int y, int d):x(x),y(y),d(d) {}
+};
+int dx[]={0,0,-1,1};
+int dy[]={-1,1,0,0};
+int Map[51][51];
+bool visited[51][51];
+vector<node> pos;
+vector<node> ext;
+queue<node> Q;
+int N,M;
+int max_num = 0;
+int val;
+node des;
+void bfs(){
+    node temp;
+    while(!Q.empty()){
+        temp = Q.front();
+        val= temp.d;
+        Q.pop();
+        for(int dir=0; dir<4; dir++){
+            if(0<=temp.x+dx[dir]&&temp.x+dx[dir]<M &&
+               0<=temp.y+dy[dir]&&temp.y+dy[dir]<N &&
+                Map[temp.y+dy[dir]][temp.x+dx[dir]]==0&&
+                visited[temp.y+dy[dir]][temp.x+dx[dir]]==false){
+                visited[temp.y+dy[dir]][temp.x+dx[dir]]=true;
+                Q.push(node(temp.x+dx[dir],temp.y+dy[dir], temp.d+1));
+            }
+        }
+    }
+    for(int r=0; r<N; r++){
+        for(int c=0; c<M; c++){
+            visited[r][c] = false;
+        }
+    }
+}
+
+int main(){
+    cin >> N>>M;
+    string temp_str;
+    for(int r=0; r<N; r++){
+        cin>>temp_str;
+        for(int c=0; c<M; c++){
+            if(temp_str[c] == 'W'){
+                Map[r][c] = 1;
+                visited[r][c]=true;
+            }else if(temp_str[c] == 'L'){
+                Map[r][c] = 0;
+                pos.push_back(node(c,r,0));
+            }
+        }
+    }
+    for(int k=0; k<pos.size(); k++){
+        //수직, 평면으로 뚫려있는 곳은 걸러내자
+        int num=0;
+        for(int dir = 0; dir < 4; dir++){
+            if(!(0<=pos[k].x+ dx[dir]&&pos[k].x+ dx[dir]<M &&
+               0<=pos[k].y+ dy[dir]&&pos[k].y+ dy[dir]<N )||
+               Map[pos[k].y+ dy[dir]][pos[k].x+ dx[dir]]==1){
+                num++;
+            }
+        }
+        
+        if(num<2){
+            continue;
+        }
+        ext.push_back(node(pos[k].x,pos[k].y,0));
+        //num=0;
+    }
+    for(int i=0; i<ext.size(); i++){
+        Q.push(node(ext[i].x, ext[i].y, 0));
+        bfs();
+        if(max_num < val){
+            max_num = val;
+        }
+    }
+    
+    cout <<max_num;
+    return 0;
+}
