@@ -1,4 +1,4 @@
-// SW expert[격자판의 숫자 이어 붙이기]
+// SWEA[격자판의 숫자 이어 붙이기]
 // dfs + map 
 #include<iostream>
 #include<vector>

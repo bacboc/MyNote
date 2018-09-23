@@ -1,5 +1,6 @@
 //백준 [보물섬]
 // BFS
+// 노드개수를 처음에 줄여놔서 시간이 많이 줄었다.
 #include<iostream>
 #include<vector>
 #include<algorithm>

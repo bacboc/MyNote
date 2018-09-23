@@ -1,0 +1,76 @@
+// 백준 [스타트와 링크]
+// 조합 두번으로 가능하다.
+// 반 나누고 그 중 2개 고르고 
+#include <iostream>
+#include <vector>
+#include<algorithm>
+using namespace std;
+int N;
+int Map[21][21];
+int min_num =987654321;
+vector<int> sel_A, sel_B, sol_A, sol_B;
+int sum_A=0, sum_B=0;
+void cal_A(int selected, int depth){
+    if(depth<=N/2){
+        if(selected==2){
+            sum_A+= Map[sol_A[0]][sol_A[1]]+Map[sol_A[1]][sol_A[0]];
+        }else{
+            sol_A.push_back(sel_A[depth]);
+            cal_A(selected+1, depth+1);
+            sol_A.pop_back();
+            cal_A(selected, depth+1);
+        }
+    }
+}
+void cal_B(int selected, int depth){
+    if(depth<=N/2){
+        if(selected==2){
+            sum_B+= Map[sol_B[0]][sol_B[1]]+Map[sol_B[1]][sol_B[0]];
+        }else{
+            sol_B.push_back(sel_B[depth]);
+            cal_B(selected+1, depth+1);
+            sol_B.pop_back();
+            cal_B(selected, depth+1);
+        }
+    }
+}
+
+
+void dfs(int selected, int depth){
+    if(depth<=N){
+        if(selected == N/2){
+            int index=0;
+            for(int i=0; i<N; i++){
+                if(i == sel_A[index]){
+                    index++;
+                }else{
+                    sel_B.push_back(i);
+                }
+            }
+            // cal
+            cal_A(0,0);
+            cal_B(0,0);
+            min_num = min(abs(sum_A-sum_B),min_num);
+            sum_A=0;
+            sum_B=0;
+            sel_B.clear();
+        }else{
+            sel_A.push_back(depth);
+            dfs(selected+1,depth+1);
+            sel_A.pop_back();
+            dfs(selected,depth+1);
+        }
+    }
+}
+int main() {
+    cin >> N;
+    for(int r=0; r<N; r++){
+        for(int c=0; c<N; c++){
+            cin >> Map[r][c];
+        }
+    }
+    dfs(0,0);
+    
+    cout << min_num;
+    return 0;
+}

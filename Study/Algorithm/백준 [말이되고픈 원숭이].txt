@@ -1,0 +1,64 @@
+//백준 [말이되고픈 원숭이]
+//BFS이다. 생각을 잘하자
+// node의 상태가 있는 BFS의 Visited놓는것이 가장 큰 배울점 같다.
+// 입력에서 가로, 세로가 꼬였다. 문제좀 잘 읽고 시작하자
+
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<queue>
+using namespace std;
+int K, N, M;
+int map[201][201];
+int dx[]={-1,1,-2,2,-2,2,-1,1};
+int dy[]={-2,-2,-1,-1,1,1,2,2};
+int ddx[] ={0,0,-1,1};
+int ddy[] ={-1,1,0,0};
+bool visited[31][201][201];
+struct node{
+    int x, y, depth, k;
+    node(){};
+    node(int x, int y, int depth, int k):x(x), y(y), depth(depth), k(k){}
+};
+int sol=-1;
+queue<node> Q;
+int main(){
+    cin >> K >> N >> M;
+    for(int r=0; r<M; r++){
+        for(int c=0; c<N; c++){
+            cin >> map[r][c];
+        }
+    }
+    
+    Q.push(node(0,0,0,K));
+    
+    while(!Q.empty()){
+        node temp = Q.front();
+        Q.pop();
+        if(temp.x == N-1 && temp.y ==M-1){
+            sol = temp.depth;
+            break;
+        }
+        for(int d=0; d<4; d++){
+            if(0<=temp.x+ddx[d]&&temp.x+ddx[d]<N&&0<=temp.y+ddy[d]&&temp.y+ddy[d]<M && map[temp.y+ddy[d]][temp.x+ddx[d]] == 0&&
+                visited[temp.k][temp.y+ddy[d]][temp.x+ddx[d]] == false){
+                visited[temp.k][temp.y+ddy[d]][temp.x+ddx[d]] = true;
+                Q.push(node(temp.x+ddx[d],temp.y+ddy[d],temp.depth+1, temp.k));
+            }
+        }
+        if(temp.k>0){
+            for(int d=0; d<8; d++){
+                if(0<=temp.x+dx[d]&&temp.x+dx[d]<N&&0<=temp.y+dy[d]&&temp.y+dy[d]<M && map[temp.y+dy[d]][temp.x+dx[d]] == 0&&
+                    visited[temp.k-1][temp.y+dy[d]][temp.x+dx[d]] == false){
+                    visited[temp.k-1][temp.y+dy[d]][temp.x+dx[d]] =true;
+                    Q.push(node(temp.x+dx[d],temp.y+dy[d],temp.depth+1, temp.k-1));
+                }
+            }
+        }
+    }
+    while(!Q.empty()){
+        Q.pop();
+    }
+    cout << sol << endl;
+    return 0;
+}

@@ -1,0 +1,144 @@
+// 백준 [경사로]
+// 비효율적으로 함수를 안쓰고 작성해보았는데
+// 나조차 코드를 알아보기 쉽지 않다. 함수의 중요성 !
+
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<cmath>
+using namespace std;
+int N, L;
+int Map[101][101];
+bool visited[101];
+int main(){
+    cin >> N>>L;
+    for(int r=0; r<N;r++){
+        for(int c=0; c<N; c++){
+            cin >> Map[r][c];
+        }
+        visited[r] = false;
+    }
+    int sol =0;
+    bool flag = true;
+    for(int c=0; c<N; c++){
+        flag=true;
+        for(int r=1; r<N; r++){//열(세로) 검사
+            if(abs(Map[r-1][c]-Map[r][c])>1){
+                flag=false;
+                break;
+            }
+            if(Map[r-1][c] <Map[r][c]){//전의것보다 더 크다.
+                if(L==1){
+                    if(visited[r-1]==true){
+                        flag = false;
+                        break;
+                    }
+                    visited[r-1]=true;
+                }else{
+                    for(int k=1; k<L; k++){ // 경사로 검사
+                        if(r-k-1 <0 || Map[r-k-1][c]!= Map[r-k][c] ||
+                            visited[r-k-1]==true){
+                            flag = false;
+                            break;
+                        }
+                        visited[r-k]=true;
+                        visited[r-k-1]=true;
+                    }
+                }
+            }else if(Map[r-1][c] >Map[r][c]){//전의것보다 더 작다.
+                if(L==1){
+                    if(visited[r]==true){
+                        flag = false;
+                        break;
+                    }
+                    visited[r]=true;
+                }else{
+                    for(int k=0; k<L-1; k++){ // 경사로 검사
+                        if(r+k+1 >= N || Map[r+k][c]!= Map[r+k+1][c] ||
+                           visited[r+k+1]==true){
+                            flag = false;
+                            break;
+                        }
+                        visited[r+k]=true;
+                        visited[r+k+1]=true;
+                    }
+                }
+            }
+            if(flag==false)
+                break;
+        }
+        //처리
+        if(flag==true){
+            sol++;
+        }else{
+            flag = false;
+        }
+        for(int i=0; i<N; i++){
+            visited[i] = false;
+        }
+    }
+    
+    flag = true;
+    for(int r=0; r<N; r++){
+        flag=true;
+        for(int c=1; c<N; c++){//가로 검사
+            if(abs(Map[r][c-1]-Map[r][c])>1){
+                flag=false;
+                break;
+            }
+                
+            if(Map[r][c-1] <Map[r][c]){//전의것보다 더 크다.
+                if(L==1){
+                    if(visited[c-1]==true){
+                        flag = false;
+                        break;
+                    }
+                    visited[c-1]=true;
+                }else{
+                    for(int k=1; k<L; k++){ // 경사로 검사
+                        if(c-k-1 <0 || Map[r][c-k-1]!= Map[r][c-k] ||
+                           visited[c-k-1]==true){
+                            flag = false;
+                            break;
+                        }
+                        visited[c-k]=true;
+                        visited[c-k-1]=true;
+                    }
+                }
+            }else if(Map[r][c-1] >Map[r][c]){//전의것보다 더 작다.
+                if(L==1){
+                    if(visited[c]==true){
+                        flag = false;
+                        break;
+                    }
+                    visited[c]=true;
+                }else{
+                    for(int k=0; k<L-1; k++){ // 경사로 검사
+                        if(c+k+1 >= N || Map[r][c+k]!= Map[r][c+k+1] ||
+                           visited[c+k+1]==true){
+                            flag = false;
+                            break;
+                        }
+                        visited[c+k]=true;
+                        visited[c+k+1]=true;
+                    }
+                }
+            }
+            if(flag==false)
+                break;
+        }
+        //처리
+        if(flag==true){
+            sol++;
+        }else{
+            flag = false;
+        }
+        for(int i=0; i<N; i++){
+            visited[i] = false;
+        }
+    }
+    
+    cout <<sol<<endl;
+    
+    return 0;
+}
