@@ -1,0 +1,75 @@
+// 백준 [매직스타]
+// dfs 자리 순서 배치 
+#include<iostream>
+#include<vector>
+#include<string>
+using namespace std;
+int arr[12];
+bool visited[12]={false,};
+int num=0;
+bool flag=false;
+void print(){
+    cout << "...."<<(char)(arr[0]+'A') << "....\n";
+    cout << "."<<(char)(arr[1]+'A')<<"."<<(char)(arr[2]+'A')<<"."<<(char)(arr[3]+'A')<<"."<<(char)(arr[4]+'A')<<".\n";
+    cout <<".."<<(char)(arr[5]+'A')<<"..."<<(char)(arr[6]+'A')<<"..\n";
+    cout << "."<<(char)(arr[7]+'A')<<"."<<(char)(arr[8]+'A')<<"."<<(char)(arr[9]+'A')<<"."<<(char)(arr[10]+'A')<<".\n";
+    cout << "...."<<(char)(arr[11]+'A') << "....\n";
+}
+bool check(){
+    if(arr[0] + arr[2] + arr[5]+ arr[7] != 22)
+        return false;
+    if(arr[0] + arr[3] + arr[6]+ arr[10] != 22)
+        return false;
+    if(arr[1] + arr[2] + arr[3]+ arr[4] != 22)
+        return false;
+    if(arr[1] + arr[5] + arr[8]+ arr[11] != 22)
+        return false;
+    if(arr[4] + arr[6] + arr[9]+ arr[11] != 22)
+        return false;
+    if(arr[7] + arr[8] + arr[9]+ arr[10] != 22)
+        return false;
+    
+    return true;
+}
+void dfs(int depth){
+    if(flag)
+        return;
+    if(depth > num){
+        if(check()){
+            print();
+            flag = true;
+        }
+    }else{
+        if(arr[depth]!=-1){
+            dfs(depth+1);
+            return;
+        }
+        for(int i=0; i<12; i++){
+            if(visited[i] == false){
+                visited[i]=true;
+                arr[depth]=i;
+                dfs(depth+1);
+                arr[depth]=-1;
+                visited[i]=false;
+            }
+        }
+    }
+}
+int main(){
+    string str_temp;
+    for(int k=0; k<5; k++){
+        cin >> str_temp;
+        for(int i=0; i<9; i++){
+            if(str_temp[i] != '.'){
+                if(str_temp[i]=='x'){
+                    arr[num++]=-1;
+                }else{
+                    visited[(int)(str_temp[i] -'A')] = true;
+                    arr[num++] =(int)(str_temp[i] -'A');
+                }
+            }
+        }
+    }
+    dfs(0);
+    return 0;
+}
