@@ -15,12 +15,45 @@ auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 
 api = tweepy.API(auth)
 
-keywords=['제주','제주도','제주여행','제주도여행','#제주','#제주도','#제주여행','#제주도여행','#제주맛집','제주맛집','#제주도맛집','한라산','#한라산','#제주카페','#올레길','올레길','제주바다','#제주바다','#제주카페']
+keywords=['제주','제주도','제주동부','베니스랜드','#제주','#제주도','#베니스랜드','#제주도여행','#제주맛집','제주맛집','#제주도맛집','한라산','#한라산','#제주카페','#올레길','올레길','제주바다','#제주바다','#제주카페']
+keywords1=['제주동부여행','종달리마을','헤모랏'
+'송달리마을(마카롱)',
+"원데이클래스",
+"사려니 숲",
+'성게밥',
+'전복비빔밥',
+"월정리",
+"제주여행지",
+"아침미소목장",
+"맛있는폴부엌",
+"새별오름",
+"돌마을공원",
+"협재해수욕장",
+"제주카페",
+'우도',
+"제주흑돼지",
+"성산",
+"성산일출봉",
+'#제주동부여행','#종달리마을','#헤모랏'
+'#송달리마을(마카롱)',
+"#원데이클래스",
+"#사려니 숲",
+"#월정리",
+"#제주여행지",
+"#아침미소목장",
+"#맛있는폴부엌",
+"#새별오름",
+"#돌마을공원",
+"#협재해수욕장",
+"#제주카페",
+"#제주흑돼지",
+"#성산",
+"#성산일출봉"]
 spam=' -RT -마사지 -영덕 -#제주호스트빠 -#출장안마 -#수앤수 -010 -오설록 -#제주호빠 -#제주콜걸 -#초대남 -한라산볶음밥 -#뜨겁게 -유흥 -#제주출장샵 -쿠폰'
 
 keywordSet=[]
-for i in range(0,len(keywords)):
-    keywordSet.insert(0,keywords[i] + spam)
+for i in range(0,len(keywords1)):
+    keywordSet.insert(0,keywords1[i] + spam)
 
 #keyword='제주도여행 -RT -#제주호스트빠 -#출장안마 -#수앤수 -010 -오설록 -#제주호빠 -#제주콜걸 -#초대남 -한라산볶음밥'
 result=[]
@@ -29,7 +62,7 @@ for k in range(0, len(keywordSet)):
     for i in range(1,3):
         tweets = api.search(keywordSet[k])
         for tweet in tweets:
-            print([tweet.id_str, tweet.text, tweet.created_at])
+            #print([tweet.id_str, tweet.text, tweet.created_at])
             try:
                 cur.execute("""INSERT INTO tweeter(id, content, date) VALUES(%s,%s,%s)""",(tweet.id_str, tweet.text, tweet.created_at))
                 cur.connection.commit()

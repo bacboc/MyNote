@@ -1,0 +1,134 @@
+// SWEA [무선 충전]
+// 시뮬레이션
+
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <algorithm>
+using namespace std;
+int M, A;
+int map[10][10];
+vector<int> mDir[2];
+struct node{
+    int x,y,c,p;
+    node(int x, int y, int c, int p):x(x), y(y), c(c), p(p) {};
+};
+bool cmp (node a, node b){
+    return a.p>b.p;
+};
+struct people{
+    int x,y,sum;
+    people(int x, int y): x(x), y(y),sum(0) {}
+};
+int dx[]= {0,0,1,0,-1};
+int dy[]= {0,-1,0,1,0};
+vector<node> BC;
+people P1(0,0), P2(9,9);
+bool visited[8]={false,};
+void check(int *Z1, int *Z2, int type){
+    if(type==0){
+        for(int k=0; k< BC.size(); k++){ // 베터리 수 만큼 검사
+            if(abs(BC[k].x - P1.x)+abs(BC[k].y-P1.y) <= BC[k].c){
+                if(visited[k]==false){
+                    visited[k] = true;
+                    *Z1 = BC[k].p;
+                    break;
+                }
+            }
+        }
+        for(int k=0; k< BC.size(); k++){ // 베터리 수 만큼 검사
+            if(abs(BC[k].x - P2.x)+abs(BC[k].y-P2.y) <= BC[k].c){
+                if(visited[k]==false){
+                    visited[k] = true;
+                    *Z2=BC[k].p;
+                    break;
+                }
+            }
+        }
+    }else{
+        for(int k=0; k< BC.size(); k++){ // 베터리 수 만큼 검사
+            if(abs(BC[k].x - P2.x)+abs(BC[k].y-P2.y) <= BC[k].c){
+                if(visited[k]==false){
+                    visited[k] = true;
+                    *Z2=BC[k].p;
+                    break;
+                }
+            }
+        }
+        for(int k=0; k< BC.size(); k++){ // 베터리 수 만큼 검사
+            if(abs(BC[k].x - P1.x)+abs(BC[k].y-P1.y) <= BC[k].c){
+                if(visited[k]==false){
+                    visited[k] = true;
+                    *Z1 = BC[k].p;
+                    break;
+                }
+            }
+        }
+    }
+}
+int main() {
+    int T;
+    cin >> T ;
+    for(int t=1; t<=T ; t++){
+        cin >> M >>A;
+        for(int i=0; i<2; i++){
+            for(int n=0; n<M; n++){
+                int dir;
+                cin >> dir;
+                mDir[i].push_back(dir);
+            }
+        }
+        for(int i=0; i<A; i++){
+            int x,y,C,P;
+            cin >> x >> y >> C >> P;
+            BC.push_back(node(x-1,y-1,C,P));
+        }
+        sort(BC.begin(), BC.end(), cmp);
+
+        for(int g =0 ; g <= M; g++){
+            // 범위 check
+            int Z1=0, Z2=0, temp1, temp2;
+            check(&Z1, &Z2, 0);
+            temp1=Z1; temp2=Z2;
+            for(int k=0; k<8; k++){
+                visited[k] = false;
+            }Z1=0;Z2=0;
+            
+            check(&Z1, &Z2, 1);
+            if(temp1+temp2 >= Z1 + Z2){
+                P1.sum +=temp1;
+                P2.sum +=temp2;
+                //cout << g <<" : "<< temp1 <<" "<< temp2 << "\n";
+            }else{
+                P1.sum += Z1;
+                P2.sum += Z2;
+                //cout << g <<" : "<< Z1 <<" "<< Z2 << "\n";
+            }
+            for(int k=0; k<8; k++){
+                visited[k] = false;
+            }
+            if(g!=M){
+                P1.x += dx[mDir[0][g]];
+                P1.y += dy[mDir[0][g]];
+                P2.x += dx[mDir[1][g]];
+                P2.y += dy[mDir[1][g]];
+            }
+        }
+        
+        
+        cout <<"#"<<t<<" " <<P1.sum + P2.sum << " \n";
+        
+        //마지막 초기화
+        P1.x=0;P1.y=0; P1.sum=0;
+        P2.x=9;P2.y=9; P2.sum=0;
+        mDir[0].clear();
+        mDir[1].clear();
+        BC.clear();
+        for(int r=0; r< 10; r++){
+            for(int c=0; c<10; c++){
+                map[r][c]=0;
+            }
+        }
+    }
+    return 0;
+}
