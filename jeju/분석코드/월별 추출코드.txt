@@ -1,0 +1,60 @@
+#########################  월별 NOUN,해쉬태그와 빈도수 추출하기 (noun_X월.txt) ############################
+import pymysql
+import nltk
+from collections import Counter
+from konlpy.tag import Okt
+okt=Okt()
+
+#배열안에 있는 요수들의 빈도수 세주는 함수
+def get_tags(arr, ntags):
+    count = Counter(arr)
+    return_list = []
+    for n, c in count.most_common(ntags):
+        temp = {'tag':n, 'count':c}
+        return_list.append(temp)
+    return return_list
+
+#트윗에서 명사,해쉬태그추출 후 빈도수 구하기
+def get_nouns(rows):
+    token_arr = [okt.pos(row[1], norm=True, stem=True) for row in rows[1:]]
+    items = []
+    for tokens in token_arr:
+        for t in tokens:      #트윗별로 명사인것만 골라내기
+            if "Hashtag" in t[1]:                    #트윗별로 해쉬태그인것만 골라내기
+                items.append(str((t[0].split('#'))[-1]) + ' ')
+            elif "Noun" in t[1] and len(t[0]) > 1:   #트윗별로 Noun인것만 골라내기
+                items.append(str(t[0]) + ' ')
+                
+    tags = get_tags(items, 1000)  #빈도수 구하기
+    result = []
+    for tag in tags:
+        noun = tag['tag']
+        count = tag['count']
+        result.append("%s\t%d"%(noun, count))
+    return result
+
+########################### DB 연동하기 ##########################################
+conn = pymysql.connect(host='127.0.0.1', user='root', passwd='sdf01044', db='mysql', charset='utf8')
+cur = conn.cursor()
+cur.execute("USE tourmaker")
+#cur.execute("select * from tweeter;")
+
+for date_num in range(2,11):
+    print(str(date_num) + '월')
+    cur.execute("select * from tweeter where DATE(date) between '2018-0%d-00' and '2018-0%d-00';"%(date_num,date_num+1))
+    rows = cur.fetchall()
+    #print(len(rows))
+
+
+
+    output_file_name = "noun_%d월.txt"%(date_num)
+    open_output_file = open(output_file_name, 'a+',-1,"utf-8") 
+    result = get_nouns(rows)
+
+    #파일에 쓰기
+    for r in result:
+        open_output_file.write('{}\n'.format(r))
+    open_output_file.close() 
+cur.close()
+conn.close()
+print("Finish")

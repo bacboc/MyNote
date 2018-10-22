@@ -1,0 +1,52 @@
+#########################  NOUN 추출하기 (noun.txt) ############################
+import pymysql
+import nltk
+from collections import Counter
+from konlpy.tag import Okt
+okt=Okt()
+
+########################### DB 연동하기 ##########################################
+conn = pymysql.connect(host='127.0.0.1', user='root', passwd='sdf01044', db='mysql', charset='utf8')
+cur = conn.cursor()
+cur.execute("USE tourmaker")
+cur.execute("select * from tweeter;")
+rows = cur.fetchall()
+
+#배열안에 있는 요수들의 빈도수 세주는 함수
+def get_tags(arr, ntags):
+    count = Counter(arr)
+    return_list = []
+    for n, c in count.most_common(ntags):
+        temp = {'tag':n, 'count':c}
+        return_list.append(temp)
+    return return_list
+
+#트윗에서 명사와 빈도수 추출
+def get_nouns(rows):
+    token_arr = [okt.pos(row[1], norm=True, stem=True) for row in rows[1:]]
+    nouns = []
+    for tokens in token_arr:
+        for t in tokens:      #트윗별로 명사인것만 골라내기
+            if "Noun"in t[1] and len(t[0])>1:
+                nouns.append(t[0])
+                
+    tags = get_tags(nouns, 1000)  #빈도수 구하기
+    result = []
+    for tag in tags:
+        noun = tag['tag']
+        count = tag['count']
+        result.append("%s\t%d"%(noun, count))
+    return result
+
+output_file_name = "noun.txt"
+open_output_file = open(output_file_name, 'a+',-1,"utf-8") 
+result = get_nouns(rows)
+
+#파일에 쓰기
+for r in result:
+    open_output_file.write('{}\n'.format(r))
+    
+open_output_file.close()
+cur.close()
+conn.close()
+print("Finish")

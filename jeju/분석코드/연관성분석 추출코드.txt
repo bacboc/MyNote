@@ -1,0 +1,41 @@
+#########################  연관성 분석을 위한 Data 추출하기 (associtation.txt) ############################
+import pymysql
+import nltk
+from collections import Counter
+from konlpy.tag import Okt
+okt=Okt()
+
+########################### DB 연동하기 ##########################################
+conn = pymysql.connect(host='127.0.0.1', user='root', passwd='sdf01044', db='mysql', charset='utf8')
+cur = conn.cursor()
+cur.execute("USE tourmaker")
+cur.execute("select * from tweeter;")
+rows = cur.fetchall()
+
+def get_hashtag(rows):
+    token_arr = [okt.pos(row[1], norm=True, stem=True) for row in rows[1:]]
+    hashtags = []
+    for tokens in token_arr:
+        tmp = ""
+        for t in tokens:      
+            if "Hashtag" in t:                    #트윗별로 해쉬태그인것만 골라내기
+                h = str((t[0].split('#'))[-1])
+                if "제주" != h and "제주도" != h and "할인" != h and "쿠폰" != h and "이번" != h:
+                    tmp += (h + ' ')
+            elif "Noun" in t and len(t[0]) > 1:   #트윗별로 Noun인것만 골라내기
+                if "제주" != t[0] and "제주도" != t[0] and "할인" != t[0] and "쿠폰" != t[0] and "이번" != t[0]:
+                    tmp += (str(t[0]) + ' ')
+        if len(tmp) > 0:
+            hashtags.append(tmp)
+    return hashtags
+
+output_file_name = "associtation.txt"
+open_output_file = open(output_file_name, 'a+',-1,"utf-8") 
+hashtag = get_hashtag(rows)
+for h in hashtag:
+    open_output_file.write('{}\n'.format(h))
+
+open_output_file.close()
+cur.close()
+conn.close()
+print("Finish")

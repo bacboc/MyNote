@@ -1,0 +1,84 @@
+//#include "stdafx.h"
+#include <iostream>
+#include<string>
+#include<vector>
+#include<queue>
+#include<map>
+#include<sstream>
+#include<functional>
+using namespace std;
+
+vector<string> v;
+
+map<string, string> m;
+vector<pair<int, string>> my_pair;
+
+int main()
+{
+	while (true)
+	{
+		string s;
+
+		getline(cin, s);
+
+		if (s == "inputEnd")
+			break;
+
+		v.push_back(s);
+	}
+
+	int size = v.size();
+
+	for (int i = 0; i < size; i++)
+	{
+		stringstream ss;
+		string s;
+		ss.str(v[i]);
+		while (ss >> s)
+		{
+			if (m.count(s) != 0)
+				m[s] = m[s] + v[i];
+			else
+				m[s] = v[i];
+		}
+	}
+
+	cout << "[局岿]苞 楷包等 飘拉: " << endl;
+
+	string s = m["局岿"];
+	stringstream ss;
+	string new_str = "";
+	ss.str(s);
+	map<string, int> new_m;
+	map<string, int>::iterator new_m_iter;
+
+	while (ss >> s)
+	{
+		if (new_m.count(s) == 0)
+		{
+			new_m[s] = 1;
+		}
+		else
+		{
+			new_m[s] = new_m[s] + 1;
+		}
+	}
+
+	for (new_m_iter = new_m.begin(); new_m_iter != new_m.end(); new_m_iter++)
+	{
+		my_pair.push_back(make_pair(new_m_iter->second, new_m_iter->first));
+	}
+	sort(my_pair.begin(), my_pair.end(), greater<pair<int, string>>());
+
+	int p_size = my_pair.size();
+
+	for (int i = 0; i < p_size; i++)
+	{
+		if (i % 10 == 0)
+			printf("\n");
+		cout << "[" << my_pair[i].second << " " << my_pair[i].first << "] ";
+	}
+	cout << endl;
+
+	return 0;
+}
