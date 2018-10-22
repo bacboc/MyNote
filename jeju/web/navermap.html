@@ -1,125 +1,376 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
+<!DOCTYPE html>   <!--   지   도   -->
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>그리기 도구 모듈 기본 예제</title>
-    <script src="../../docs/js/jquery-1.9.1.js"></script>
-    <script type="text/javascript" src="../../docs/js/examples-base.js"></script>
-    <script type="text/javascript" src="../../docs/js/highlight.min.js"></script>
-    <script src='http://dev.openapi.map.naver.com/openapi/maps3.max.js?submodules=drawing'></script>
-    <!-- <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId=MK_1sBFRuO6XEvDi29iW&amp;submodules=drawing"></script> -->
-    <link rel="stylesheet" type="text/css" href="../../docs/css/examples-base.css" />
-    <script>
-        var HOME_PATH = '../../docs';
-    </script>
-</head>
-<body>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 위 3개의 메타 태그는 *반드시* head 태그의 처음에 와야합니다; 어떤 다른 콘텐츠들은 반드시 이 태그들 *다음에* 와야 합니다 -->
+    <title>JEJU</title>
 
-<!-- @category Drawing -->
+    <!-- 부트스트랩 -->
+    <link href="tool/css/bootstrap.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId=AlWeVmj86pAZl3ts8CpR&submodules=geocoder"></script>
+    <style>
+        body{
+          padding-top:20px;
+          background-image:url("img/jeju1.jpg");
+          background-attachment:fixed;
+          background-size:cover;
+          color: white;
+        }
+        .back{
+          background-color: rgba(0,0,0,0.7);
+        }
+        
+  </style>
+  </head>
+  <body>
+    <div class="navbar-wrapper">
+      <div class="container">
 
-<div id="wrap" class="section">
-    <h2>그리기 도구 모듈 기본 예제</h2>
-    <p>기본 옵션을 적용한 그리기 도구 모듈입니다. 도형을 생성, 선택, 삭제 시 발생하는 이벤트가 좌측 하단에 표시됩니다.</p>
-    <div id="map" style="width:100%;height:800px;">
-        <div id="_panel" style="display: inline-block; position: relative; z-index: 1;margin: 20px 0 0 20px;font-size: 12px;">
-            <div id="guide" style="display: inline-block;border: 1px solid #b4b4b4;border-radius: 4px;padding: 10px;background: #fff;">
-                <b>그리기</b><br>
-                아이콘이 선택된 상태에서 지도 위에 클릭합니다.<br>
-                - shift 를 누르고 있는 경우 정방형/직교좌표로 스냅이 제공됩니다.<br>
-                - polygon, polyline: 우클릭/esc로 그리기 종료.<br>
-                <br>
-                <b>이동</b><br>
-                그려진 도형을 클릭하여 편집 모드로 변경합니다.<br>
-                그려진 도형을 드래그하여 이동합니다.<br>
-                <br>
-                <b>수정</b><br>
-                그려진 도형을 클릭하여 편집 모드로 변경합니다.<br>
-                그려진 도형의 제어점을 드래그 하여 수정합니다.<br>
-                - polygon, polyline: 중간 제어점을 클릭하면 점을 추가합니다.<br>
-                <br>
-                <b>삭제</b><br>
-                그려진 도형을 우클릭하여 삭제합니다.
+        <nav class="navbar navbar-inverse navbar-static-top back">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">JEJU</a>
             </div>
-            <br>
-            <div style="display: inline-block;border: 1px solid #b4b4b4;border-radius: 4px;padding: 10px;overflow: scroll;margin-top: 10px;max-height: 300px;background: #fff;">
-                <div><b>Occurred Events</b></div>
-                <div id="logger" ></div>
+
+            <div id="navbar" class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                <li class="active"><a href="./home.html">Home</a></li>
+                <li><a href="./index.html"> 제주 여행지 추천 </a></li>
+                <li><a href="./index1.html"> 제주 월별 키워드 </a></li>
+                <li><a href="./index2.html"> 연관성 분석 </a></li>
+                <li><a href="./index3.html"> 수집 데이터 </a></li>
+              </ul>
             </div>
-        </div>
+          </div>
+        </nav>
+
+      </div>
+    </div>
+    <!-- 본문 내용 채우기 -->
+  <!-- 
+
+부모님코스:흑돼지천왕->한라산->우유부단->협재해수욕장->그해제주
+
+여자친구 추천코스:앙끄레국수->애월 버터모닝->하멜베이커리->에코랜드->멜록 게스트하우스
+
+Hard코스:우도->로컬크랩->성산일출봉->섭지코지->아쿠아플래닛->봄꽃게스트하우스
+
+친구코스:제주명가두루치기->쇠소깍->알라스카인->함덕해수욕장->어떤날게스트하우스
+
+한라산 33.3616666,126.52916660000005
+성산일출봉 33.45805600000001,126.9425
+우도 33.5042977,126.95404800000006
+함덕해수욕장 33.5434231,126.6697752
+용눈이오름 33.4599676,126.83147699999995
+올레길 33.2782372,126.7154543,1548
+섭지코지 33.4241107,126.9244073
+쇠소깍 33.2511579,126.6188105
+비자림 33.484272,126.8042906
+협재해수욕장 33.4146881,126.1913891
+에코랜드 33.4517789,126.6628665
+용눈이오름 33.4599622,126.7964575
+아쿠아플라넷 33.4327935,126.9257214
+
+---맛집
+흑돼지천왕 33.3892576,126.799015
+앙끄레국수33.2474435,126.5095051
+로컬크랩 33.558142,126.732646
+제주명가두루치기 33.2495763,126.5688365
+
+
+-- 카페 --
+최마당네빵다방 33.3988157,126.2441208
+알라스카인제주 33.4675773,126.3164507
+제주 하멜 33.4784716,126.4740049
+아침미소목장 33.4546256,126.5839544
+버터모닝 33.4642648,126.4208451
+우유부단 33.3476411,126.3260766
+
+
+
+-- 숙소 --
+그해제주 33.3972343,126.2406504
+맬록게스트하우스 33.523979,126.5605173
+제주게스트하우스 봄꽃 33.2209353,126.2486498
+어떤날 게스트하우스&카페 33.5535948,126.8051749
+
+-->
+    <div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-8">
+      <h1> Jeju </h1>
+
+      <script type="text/javascript" id="data">
+      function A(){
+        //부모님코스:
+        //흑돼지천왕(33.3892576,126.799015) : 음식점(맛집)
+        //한라산(33.3616666,126.52916660000005) : 여행지
+        //우유부단(33.3476411,126.3260766) : 카페
+        //협재해수욕장(33.394058, 126.239814) : 여행지
+        //그해제주(33.3972343,126.2406504) : 숙소 
+        document.getElementById("T").innerHTML = "가족 코스";
+        var polylinePath = [ 
+          new naver.maps.LatLng(33.3892576,126.799015),
+          new naver.maps.LatLng(33.3616666,126.52916660000005),
+          new naver.maps.LatLng(33.3476411,126.3260766),
+          new naver.maps.LatLng(33.394058, 126.239814),
+          new naver.maps.LatLng(33.3972343,126.2406504)
+        ]
+        var map = new naver.maps.Map('map',{
+        zoom: 5 //맵 크기
+        });
+        naver.maps.Service.geocode({address: myaddress}, function(status, response) {
+          if (status !== naver.maps.Service.Status.OK) {
+              return alert(myaddress + '의 검색 결과가 없거나 기타 네트워크 에러');
+          }
+          var result = response.result;
+          var myaddr = new naver.maps.Point(result.items[0].point.x, result.items[0].point.y);
+          map.setCenter(myaddr); // 검색된 좌표로 지도 이동
+      });
+        var polyline = new naver.maps.Polyline({
+        path:polylinePath,  //선 위치 변수배열
+        strokeColor: '#FF0000', //선 색
+        strokeOpacity: 0.8, //선 투명도 0~1
+        strokeWeight: 3, //선 두께
+        map: map         //오버레이할 지도
+      });
+      var idx = 0;
+      var arr=polylinePath.length;
+      while(idx < polylinePath.length){
+        arr[idx] = new naver.maps.Marker({
+            position: polylinePath[idx],// 마크 표시할 배열중 원소
+            map:map
+        });
+        idx = idx+1;
+      }
+      map.setCenter(polylinePath[polylinePath.length/2]); 
+      }
+      
+      function B(){
+        //데이트 추천코스:
+        //앙끄레국수(33.2474435,126.5095051)
+        //애월 버터모닝(33.4642648,126.4208451)
+        //하멜베이커리(33.4784716,126.4740049)
+        //에코랜드(33.4517789,126.6628665)
+        //멜록 게스트하우스(33.523979,126.5605173)
+        document.getElementById("T").innerHTML = "데이트 코스";
+
+        var polylinePath = [ 
+          new naver.maps.LatLng(33.2474435,126.5095051),
+          new naver.maps.LatLng(33.4642648,126.4208451),
+          new naver.maps.LatLng(33.4784716,126.4740049),
+          new naver.maps.LatLng(33.4517789,126.6628665),
+          new naver.maps.LatLng(33.523979,126.5605173)
+        ]
+        var map = new naver.maps.Map('map',{
+        zoom: 5 //맵 크기
+        });
+        naver.maps.Service.geocode({address: myaddress}, function(status, response) {
+          if (status !== naver.maps.Service.Status.OK) {
+              return alert(myaddress + '의 검색 결과가 없거나 기타 네트워크 에러');
+          }
+          var result = response.result;
+          var myaddr = new naver.maps.Point(result.items[0].point.x, result.items[0].point.y);
+          map.setCenter(myaddr); // 검색된 좌표로 지도 이동
+      });
+        var polyline = new naver.maps.Polyline({
+        path:polylinePath,  //선 위치 변수배열
+        strokeColor: '#FF0000', //선 색
+        strokeOpacity: 0.8, //선 투명도 0~1
+        strokeWeight: 3, //선 두께
+        map: map         //오버레이할 지도
+      });
+
+      var idx = 0;
+      var arr=polylinePath.length;
+      while(idx < polylinePath.length){
+        arr[idx] = new naver.maps.Marker({
+            position: polylinePath[idx],// 마크 표시할 배열중 원소
+            map:map
+        });
+        idx = idx+1;
+      }
+      map.setCenter(polylinePath[polylinePath.length/2]); 
+      }
+      function C(){
+        //Hard코스:
+        //우도 (33.5042977,126.95404800000006)
+        //로컬크랩 (33.558142,126.732646)
+        //성산일출봉 (33.45805600000001,126.9425)
+        //섭지코지 (33.4241107,126.9244073)
+        //아쿠아플래닛 (33.4327935,126.9257214)
+        //봄꽃게스트하우스 (33.2209353,126.2486498)
+        document.getElementById("T").innerHTML = "Hard 코스";
+        var polylinePath = [ 
+          new naver.maps.LatLng(33.5042977,126.95404800000006),
+          new naver.maps.LatLng(33.558142,126.732646),
+          new naver.maps.LatLng(33.45805600000001,126.9425),
+          new naver.maps.LatLng(33.4241107,126.9244073),
+          new naver.maps.LatLng(33.4327935,126.9257214),
+          new naver.maps.LatLng(33.2209353,126.2486498)
+        ]
+        var map = new naver.maps.Map('map',{
+        zoom: 5 //맵 크기
+        });
+        naver.maps.Service.geocode({address: myaddress}, function(status, response) {
+          if (status !== naver.maps.Service.Status.OK) {
+              return alert(myaddress + '의 검색 결과가 없거나 기타 네트워크 에러');
+          }
+          var result = response.result;
+          var myaddr = new naver.maps.Point(result.items[0].point.x, result.items[0].point.y);
+          map.setCenter(myaddr); // 검색된 좌표로 지도 이동
+      });
+        var polyline = new naver.maps.Polyline({
+        path:polylinePath,  //선 위치 변수배열
+        strokeColor: '#FF0000', //선 색
+        strokeOpacity: 0.8, //선 투명도 0~1
+        strokeWeight: 3, //선 두께
+        map: map         //오버레이할 지도
+      });
+
+      var idx = 0;
+      var arr=polylinePath.length;
+      while(idx < polylinePath.length){
+        arr[idx] = new naver.maps.Marker({
+            position: polylinePath[idx],// 마크 표시할 배열중 원소
+            map:map
+        });
+        idx = idx+1;
+      }
+      map.setCenter(polylinePath[polylinePath.length/2]); 
+      }
+      function D(){
+        //친구코스
+        //제주명가두루치기 (33.2495763,126.5688365)
+        //쇠소깍 (33.2511579,126.6188105)
+        //알라스카인 (33.4675773,126.3164507)
+        //함덕해수욕장 (33.5434231,126.6697752)
+        //어떤날게스트하우스 (33.5535948,126.8051749)
+        document.getElementById("T").innerHTML = "친구 코스";
+        var polylinePath = [ 
+          new naver.maps.LatLng(33.2495763,126.5688365),
+          new naver.maps.LatLng(33.2511579,126.6188105),
+          new naver.maps.LatLng(33.4675773,126.3164507),
+          new naver.maps.LatLng(33.5434231,126.6697752),
+          new naver.maps.LatLng(33.5535948,126.8051749)
+        ]
+        var map = new naver.maps.Map('map',{
+        zoom: 5 //맵 크기
+        });
+        naver.maps.Service.geocode({address: myaddress}, function(status, response) {
+          if (status !== naver.maps.Service.Status.OK) {
+              return alert(myaddress + '의 검색 결과가 없거나 기타 네트워크 에러');
+          }
+          var result = response.result;
+          var myaddr = new naver.maps.Point(result.items[0].point.x, result.items[0].point.y);
+          map.setCenter(myaddr); // 검색된 좌표로 지도 이동
+      });
+        var polyline = new naver.maps.Polyline({
+        path:polylinePath,  //선 위치 변수배열
+        strokeColor: '#FF0000', //선 색
+        strokeOpacity: 0.8, //선 투명도 0~1
+        strokeWeight: 3, //선 두께
+        map: map         //오버레이할 지도
+      });
+
+      var idx = 0;
+      var arr=polylinePath.length;
+      while(idx < polylinePath.length){
+        arr[idx] = new naver.maps.Marker({
+            position: polylinePath[idx],// 마크 표시할 배열중 원소
+            map:map
+        });
+        idx = idx+1;
+      }
+      map.setCenter(polylinePath[polylinePath.length/2]); 
+      }
+      </script>
+      <button type="button" class="btn btn-primary" onclick="A()">가족 코스</button>
+      <button type="button" class="btn btn-info" onclick="B()">데이트 코스</button>
+      <button type="button" class="btn btn-success" onclick="C()">Hard 코스</button>
+      <button type="button" class="btn btn-warning" onclick="D()">친구 코스</button>
+      <h3 id = "T">가족 코스</h3>
+
+      <!-- 맵을 표시할 태그  -->
+      <div id="map" style="width:100%;height:550px;"></div>
+      <script type="text/javascript">
+        var polylinePath = [ 
+          new naver.maps.LatLng(33.3892576,126.799015),
+          new naver.maps.LatLng(33.3616666,126.52916660000005),
+          new naver.maps.LatLng(33.3476411,126.3260766),
+          new naver.maps.LatLng(33.394058, 126.239814),
+          new naver.maps.LatLng(33.3972343,126.2406504)
+        ]
+      </script>
+      <script>
+      //맵 객체 생성 
+      var map = new naver.maps.Map('map',{
+        zoom: 5 //맵 크기
+      });
+
+      var myaddress = '제주';// 도로명 주소나 지번 주소만 가능 (건물명 불가!!!!)
+      naver.maps.Service.geocode({address: myaddress}, function(status, response) {
+          if (status !== naver.maps.Service.Status.OK) {
+              return alert(myaddress + '의 검색 결과가 없거나 기타 네트워크 에러');
+          }
+          var result = response.result;
+          // 검색 결과 갯수: result.total
+          // 첫번째 결과 결과 주소: result.items[0].address
+          // 첫번째 검색 결과 좌표: result.items[0].point.y, result.items[0].point.x
+          var myaddr = new naver.maps.Point(result.items[0].point.x, result.items[0].point.y);
+          map.setCenter(myaddr); // 검색된 좌표로 지도 이동
+      });
+
+      //배열을 이용해 라인 그리기
+      var polyline = new naver.maps.Polyline({
+        path:polylinePath,  //선 위치 변수배열
+        strokeColor: '#FF0000', //선 색
+        strokeOpacity: 0.8, //선 투명도 0~1
+        strokeWeight: 3, //선 두께
+        map: map         //오버레이할 지도
+      });
+
+      var idx = 0;
+      var arr=polylinePath.length;
+      while(idx < polylinePath.length){
+        arr[idx] = new naver.maps.Marker({
+            position: polylinePath[idx],// 마크 표시할 배열중 원소
+            map:map
+        });
+        idx = idx+1;
+      }
+      map.setCenter(polylinePath[polylinePath.length/2]); // 검색된 좌표로 지도 이동
+
+      // 마커 클릭 이벤트 처리
+        naver.maps.Event.addListener(marker, "click", function(e) {
+          if (infowindow.getMap()) {
+              infowindow.close();
+          } else {
+              infowindow.open(map, marker);
+          }
+        });
+        // 마크 클릭시 인포윈도우 오픈
+        var infowindow = new naver.maps.InfoWindow({
+              content: '<h4> [몽상드 애월]</h4><a href="https://www.google.com/maps/place/몽상드애월/@33.4628964,126.3091208,15z/data=!4m5!3m4!1s0x0:0x29f8a036802d64aa!8m2!3d33.4628964!4d126.3091208" target="_blank"><img src="http://img.tripnbuy.com/photo/J7XX8NmuBDFH7Aw9OJQ6UbaFSPTHqlvYIMG_2971.jpg" width="80" height ="60"></a>'
+        });
+      </script>
 
     </div>
-    <code id="snippet" class="snippet"></code>
-</div>
-<script id="code">
-    var map = new naver.maps.Map('map', {
-        zoomControl: true,
-        zoomControlOptions: {
-            style: naver.maps.ZoomControlStyle.LARGE,
-            position: naver.maps.Position.TOP_RIGHT
-        },
-        mapTypeControl: true,
-        zoom: 10
-    });
-    var drawingManager = new naver.maps.drawing.DrawingManager({map: map});
-    // 오버레이 추가
-    var rect = new naver.maps.Rectangle({
-        map: map,
-        bounds: [126.96744,37.561622,126.9737437,37.5668781],
-        fillColor: '#ff0000',
-        fillOpacity: 0.4,
-        strokeWeight: 2,
-        strokeColor: '#ff0000'
-    });
-    var polygon = new naver.maps.Polygon({
-        map: map,
-        paths: [
-            [126.9797895, 37.5670131],
-            [126.979215, 37.5649555],
-            [126.9766789, 37.5649082],
-            [126.9789515, 37.5637645],
-            [126.9785598, 37.5614914],
-            [126.9804949, 37.5632666],
-            [126.9827689, 37.5619065],
-            [126.9818039, 37.5639213],
-            [126.9837414, 37.5653719],
-            [126.9811162, 37.5651081]
-        ],
-        fillColor: '#ff0000',
-        fillOpacity: 0.4,
-        strokeWeight: 2,
-        strokeColor: '#ff0000'
-    })
-    drawingManager.addDrawing(rect, naver.maps.drawing.DrawingMode.RECTANGLE, 'my-id');
-    drawingManager.addDrawing(polygon, naver.maps.drawing.DrawingMode.POLYGON);
-</script>
-<script type="text/javascript">
-    // 이벤트 로깅
-    var logger = $('#logger'),
-        OVERAY_NAMES = ['rectangle', 'ellipse', 'polyline', 'arrowline', 'polygon', 'marker'],
-        EVENT_SUBFIXEX = ['Added', 'Selected', 'Removed'],
-        GROUPED_EVENTS = [
-            naver.maps.drawing.DrawingEvents.ADD,
-            naver.maps.drawing.DrawingEvents.SELECT,
-            naver.maps.drawing.DrawingEvents.REMOVE
-        ];
-    $(OVERAY_NAMES).each(function(i, name) {
-        $(EVENT_SUBFIXEX).each(function(i, subfix) {
-            var eventName = name + subfix;
-            drawingManager.addListener(eventName, function(overlay) {
-                logger.html(logger.html() + eventName + '<br>');
-            });
-        })
-    });
-    $(GROUPED_EVENTS).each(function(i, eventName){
-        drawingManager.addListener(eventName, function(overlay) {
-            logger.html(logger.html() + eventName + '<br>---------------------<br>');
-            logger.scrollTop(logger.innerHeight());
-        });
-    });
-</script>
+    <div class="col-sm-2">
+    </div>
+  </div>
 
-
-</body>
+    <!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요합니다) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <!-- 모든 컴파일된 플러그인을 포함합니다 (아래), 원하지 않는다면 필요한 각각의 파일을 포함하세요 -->
+    <script src="tool/js/bootstrap.min.js"></script>
+  </body>
 </html>

@@ -54,7 +54,7 @@
 
       </div>
     </div>
-    <!-- 본문 내용 채우기 -->
+ 	<!-- 본문 내용 채우기 -->
   <!-- 
 
 부모님코스:흑돼지천왕->한라산->우유부단->협재해수욕장->그해제주
@@ -103,55 +103,27 @@ Hard코스:우도->로컬크랩->성산일출봉->섭지코지->아쿠아플래�
 어떤날 게스트하우스&카페 33.5535948,126.8051749
 
 -->
-    <div class="row">
+ 	<div class="row">
     <div class="col-sm-2"></div>
     <div class="col-sm-8">
       <h1> Jeju </h1>
-
+      
       <script type="text/javascript" id="data">
       function A(){
         //부모님코스:
         //흑돼지천왕(33.3892576,126.799015) : 음식점(맛집)
         //한라산(33.3616666,126.52916660000005) : 여행지
         //우유부단(33.3476411,126.3260766) : 카페
-        //협재해수욕장(33.394058, 126.239814) : 여행지
+        //협재해수욕장(33.4146881,126.1913891) : 여행지
         //그해제주(33.3972343,126.2406504) : 숙소 
         document.getElementById("T").innerHTML = "가족 코스";
         var polylinePath = [ 
           new naver.maps.LatLng(33.3892576,126.799015),
           new naver.maps.LatLng(33.3616666,126.52916660000005),
           new naver.maps.LatLng(33.3476411,126.3260766),
-          new naver.maps.LatLng(33.394058, 126.239814),
+          new naver.maps.LatLng(33.4146881,126.1913891),
           new naver.maps.LatLng(33.3972343,126.2406504)
         ]
-        var map = new naver.maps.Map('map',{
-        zoom: 5 //맵 크기
-        });
-        naver.maps.Service.geocode({address: myaddress}, function(status, response) {
-          if (status !== naver.maps.Service.Status.OK) {
-              return alert(myaddress + '의 검색 결과가 없거나 기타 네트워크 에러');
-          }
-          var result = response.result;
-          var myaddr = new naver.maps.Point(result.items[0].point.x, result.items[0].point.y);
-          map.setCenter(myaddr); // 검색된 좌표로 지도 이동
-      });
-        var polyline = new naver.maps.Polyline({
-        path:polylinePath,  //선 위치 변수배열
-        strokeColor: '#FF0000', //선 색
-        strokeOpacity: 0.8, //선 투명도 0~1
-        strokeWeight: 3, //선 두께
-        map: map         //오버레이할 지도
-      });
-      var idx = 0;
-      var arr=polylinePath.length;
-      while(idx < polylinePath.length){
-        arr[idx] = new naver.maps.Marker({
-            position: polylinePath[idx],// 마크 표시할 배열중 원소
-            map:map
-        });
-        idx = idx+1;
-      }
-      map.setCenter(polylinePath[polylinePath.length/2]); 
       }
       
       function B(){
@@ -162,7 +134,6 @@ Hard코스:우도->로컬크랩->성산일출봉->섭지코지->아쿠아플래�
         //에코랜드(33.4517789,126.6628665)
         //멜록 게스트하우스(33.523979,126.5605173)
         document.getElementById("T").innerHTML = "데이트 코스";
-
         var polylinePath = [ 
           new naver.maps.LatLng(33.2474435,126.5095051),
           new naver.maps.LatLng(33.4642648,126.4208451),
@@ -170,35 +141,6 @@ Hard코스:우도->로컬크랩->성산일출봉->섭지코지->아쿠아플래�
           new naver.maps.LatLng(33.4517789,126.6628665),
           new naver.maps.LatLng(33.523979,126.5605173)
         ]
-        var map = new naver.maps.Map('map',{
-        zoom: 5 //맵 크기
-        });
-        naver.maps.Service.geocode({address: myaddress}, function(status, response) {
-          if (status !== naver.maps.Service.Status.OK) {
-              return alert(myaddress + '의 검색 결과가 없거나 기타 네트워크 에러');
-          }
-          var result = response.result;
-          var myaddr = new naver.maps.Point(result.items[0].point.x, result.items[0].point.y);
-          map.setCenter(myaddr); // 검색된 좌표로 지도 이동
-      });
-        var polyline = new naver.maps.Polyline({
-        path:polylinePath,  //선 위치 변수배열
-        strokeColor: '#FF0000', //선 색
-        strokeOpacity: 0.8, //선 투명도 0~1
-        strokeWeight: 3, //선 두께
-        map: map         //오버레이할 지도
-      });
-
-      var idx = 0;
-      var arr=polylinePath.length;
-      while(idx < polylinePath.length){
-        arr[idx] = new naver.maps.Marker({
-            position: polylinePath[idx],// 마크 표시할 배열중 원소
-            map:map
-        });
-        idx = idx+1;
-      }
-      map.setCenter(polylinePath[polylinePath.length/2]); 
       }
       function C(){
         //Hard코스:
@@ -217,35 +159,6 @@ Hard코스:우도->로컬크랩->성산일출봉->섭지코지->아쿠아플래�
           new naver.maps.LatLng(33.4327935,126.9257214),
           new naver.maps.LatLng(33.2209353,126.2486498)
         ]
-        var map = new naver.maps.Map('map',{
-        zoom: 5 //맵 크기
-        });
-        naver.maps.Service.geocode({address: myaddress}, function(status, response) {
-          if (status !== naver.maps.Service.Status.OK) {
-              return alert(myaddress + '의 검색 결과가 없거나 기타 네트워크 에러');
-          }
-          var result = response.result;
-          var myaddr = new naver.maps.Point(result.items[0].point.x, result.items[0].point.y);
-          map.setCenter(myaddr); // 검색된 좌표로 지도 이동
-      });
-        var polyline = new naver.maps.Polyline({
-        path:polylinePath,  //선 위치 변수배열
-        strokeColor: '#FF0000', //선 색
-        strokeOpacity: 0.8, //선 투명도 0~1
-        strokeWeight: 3, //선 두께
-        map: map         //오버레이할 지도
-      });
-
-      var idx = 0;
-      var arr=polylinePath.length;
-      while(idx < polylinePath.length){
-        arr[idx] = new naver.maps.Marker({
-            position: polylinePath[idx],// 마크 표시할 배열중 원소
-            map:map
-        });
-        idx = idx+1;
-      }
-      map.setCenter(polylinePath[polylinePath.length/2]); 
       }
       function D(){
         //친구코스
@@ -262,35 +175,7 @@ Hard코스:우도->로컬크랩->성산일출봉->섭지코지->아쿠아플래�
           new naver.maps.LatLng(33.5434231,126.6697752),
           new naver.maps.LatLng(33.5535948,126.8051749)
         ]
-        var map = new naver.maps.Map('map',{
-        zoom: 5 //맵 크기
-        });
-        naver.maps.Service.geocode({address: myaddress}, function(status, response) {
-          if (status !== naver.maps.Service.Status.OK) {
-              return alert(myaddress + '의 검색 결과가 없거나 기타 네트워크 에러');
-          }
-          var result = response.result;
-          var myaddr = new naver.maps.Point(result.items[0].point.x, result.items[0].point.y);
-          map.setCenter(myaddr); // 검색된 좌표로 지도 이동
-      });
-        var polyline = new naver.maps.Polyline({
-        path:polylinePath,  //선 위치 변수배열
-        strokeColor: '#FF0000', //선 색
-        strokeOpacity: 0.8, //선 투명도 0~1
-        strokeWeight: 3, //선 두께
-        map: map         //오버레이할 지도
-      });
 
-      var idx = 0;
-      var arr=polylinePath.length;
-      while(idx < polylinePath.length){
-        arr[idx] = new naver.maps.Marker({
-            position: polylinePath[idx],// 마크 표시할 배열중 원소
-            map:map
-        });
-        idx = idx+1;
-      }
-      map.setCenter(polylinePath[polylinePath.length/2]); 
       }
       </script>
       <button type="button" class="btn btn-primary" onclick="A()">가족 코스</button>
@@ -327,6 +212,27 @@ Hard코스:우도->로컬크랩->성산일출봉->섭지코지->아쿠아플래�
           // 첫번째 검색 결과 좌표: result.items[0].point.y, result.items[0].point.x
           var myaddr = new naver.maps.Point(result.items[0].point.x, result.items[0].point.y);
           map.setCenter(myaddr); // 검색된 좌표로 지도 이동
+
+          // 마커 표시
+          
+          var marker = new naver.maps.Marker({
+            position: myaddr,
+            map: map
+          });
+          
+          // 마커 클릭 이벤트 처리
+          naver.maps.Event.addListener(marker, "click", function(e) {
+            if (infowindow.getMap()) {
+                infowindow.close();
+            } else {
+                infowindow.open(map, marker);
+            }
+          });
+
+          // 마크 클릭시 인포윈도우 오픈
+          var infowindow = new naver.maps.InfoWindow({
+              content: '<h4> [네이버 개발자센터]</h4><a href="https://developers.naver.com" target="_blank"><img src="https://developers.naver.com/inc/devcenter/images/nd_img.png"></a>'
+          });
       });
 
       //배열을 이용해 라인 그리기
@@ -337,24 +243,33 @@ Hard코스:우도->로컬크랩->성산일출봉->섭지코지->아쿠아플래�
         strokeWeight: 3, //선 두께
         map: map         //오버레이할 지도
       });
-
-      var idx = 0;
-      var arr=polylinePath.length;
-      while(idx < polylinePath.length){
-        arr[idx] = new naver.maps.Marker({
-            position: polylinePath[idx],// 마크 표시할 배열중 원소
-            map:map
-        });
-        idx = idx+1;
-      }
-      map.setCenter(polylinePath[polylinePath.length/2]); // 검색된 좌표로 지도 이동
-
+      var marker = new naver.maps.Marker({
+        position: polylinePath[polylinePath.length-1],// 마크 표시할 배열중 원소
+        map:map
+      });
+      var marker = new naver.maps.Marker({
+        position: polylinePath[0],// 마크 표시할 배열중 원소
+        map:map
+      });
+      var marker = new naver.maps.Marker({
+        position: polylinePath[1],// 마크 표시할 배열중 원소
+        map:map
+      });
+      var marker = new naver.maps.Marker({
+        position: polylinePath[2],// 마크 표시할 배열중 원소
+        map:map
+      });
+      // 마커 표시
+      var marker1 = new naver.maps.Marker({
+        position: polylinePath[3],
+        map:map
+      });
       // 마커 클릭 이벤트 처리
         naver.maps.Event.addListener(marker, "click", function(e) {
           if (infowindow.getMap()) {
               infowindow.close();
           } else {
-              infowindow.open(map, marker);
+              infowindow.open(map, marker1);
           }
         });
         // 마크 클릭시 인포윈도우 오픈
@@ -362,6 +277,18 @@ Hard코스:우도->로컬크랩->성산일출봉->섭지코지->아쿠아플래�
               content: '<h4> [몽상드 애월]</h4><a href="https://www.google.com/maps/place/몽상드애월/@33.4628964,126.3091208,15z/data=!4m5!3m4!1s0x0:0x29f8a036802d64aa!8m2!3d33.4628964!4d126.3091208" target="_blank"><img src="http://img.tripnbuy.com/photo/J7XX8NmuBDFH7Aw9OJQ6UbaFSPTHqlvYIMG_2971.jpg" width="80" height ="60"></a>'
         });
       </script>
+<!--
+      <script id="data">//경로로 표시할 배열(array)
+      var polylinePath = [ 
+      new naver.maps.LatLng(33.4770982,126.3580263),//호텔
+      new naver.maps.LatLng(33.4601539,126.3209932),
+      new naver.maps.LatLng(33.459957,126.3132361),
+      new naver.maps.LatLng(33.4628964,126.3069268),//몽상드 애월
+      new naver.maps.LatLng(33.4342322,126.289106)
+      ]
+      </script>
+-->
+    
 
     </div>
     <div class="col-sm-2">
