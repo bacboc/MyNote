@@ -1,0 +1,160 @@
+// 백준 [통나무 옮기기]
+// BFS , visited 표시, 좌표 잡는거 더 효율적으로 잡을수 있다. ==> 중심점만 잡고 가로, 세로인지 상태만 파악하면 됨
+#include<iostream>
+#include<vector>
+#include<string>
+#include<queue>
+using namespace std;
+struct point{
+    int x, y;
+    point(int x, int y): x(x), y(y){}
+};
+struct node{
+    point B[3]={{0,0},{0,0},{0,0}};
+    int state;
+    int depth;
+    node(){};
+};
+int map[51][51];
+bool visited[2][51][51]={false,};
+int N;
+int dx[] ={0,0,-1,1};
+int dy[] ={-1,1,0,0};
+queue<node> Q;
+
+
+int main(){
+    cin >> N ;
+    string temp_str;
+    node start;
+    int index=0;
+    for(int r=0; r<N; r++){
+        cin >> temp_str;
+        for(int c=0; c<N; c++){
+            if(temp_str[c]=='B'){
+                map[r][c] = 0;
+                start.B[index++]=point(c,r);
+            }else if(temp_str[c]=='E'){
+                map[r][c] = -1;
+            }else{
+                map[r][c] = temp_str[c] - '0';
+            }
+        }
+    }
+    if(start.B[0].x ==start.B[1].x ){
+        start.state = 1;  //세로
+    }else {
+        start.state = 0;  // 가로
+    }
+    visited[start.state][start.B[1].y][start.B[1].x] = true;
+    start.depth = 0;
+    int solution=0;
+    Q.push(start);
+    bool flag = true;
+    while(!Q.empty()){
+        node temp = Q.front();
+        Q.pop();
+        //solution check
+        for(int s=0; s<3; s++){
+            if(map[temp.B[s].y][temp.B[s].x]!=-1){
+                flag = false;
+                break;
+            }
+        }
+        if(flag){
+            solution= temp.depth;
+            while(!Q.empty()){
+                Q.pop();
+            }
+        }flag = true;
+        
+        // U D L R
+        for(int d=0; d<4; d++){
+            for(int t=0; t<3; t++){
+                int nx = temp.B[t].x + dx[d];
+                int ny = temp.B[t].y + dy[d];
+                if( 0<= nx && nx<N && 0<=ny && ny<N){
+                    if(map[ny][nx]==1){
+                        flag = false;
+                        break;
+                    }
+                }else{
+                    flag = false;
+                    break;
+                }
+            }
+            if(flag){ //Q에 추가
+                node push_temp;
+                for(int t=0; t<3; t++){
+                    push_temp.B[t].x = temp.B[t].x + dx[d];
+                    push_temp.B[t].y = temp.B[t].y + dy[d];
+                }
+                push_temp.state = temp.state;
+                push_temp.depth = temp.depth+1;
+                if(visited[push_temp.state][push_temp.B[1].y][push_temp.B[1].x]==false){
+                    visited[push_temp.state][push_temp.B[1].y][push_temp.B[1].x]=true;
+                    Q.push(push_temp);
+                }
+            }
+            flag = true;
+        }
+        // T 회전
+        if(temp.state == 1){
+            if(visited[0][temp.B[1].y][temp.B[1].x]==false){
+                for(int e=0; e<3; e++){
+                    if(temp.B[e].x+1>=N || temp.B[e].x-1<0){
+                        flag=false;
+                        break;
+                    }
+                    if(map[temp.B[e].y][temp.B[e].x+1]==1 || map[temp.B[e].y][temp.B[e].x-1]==1){
+                        flag=false;
+                        break;
+                    }
+                }
+                if(flag){
+                    node pt;
+                    pt.B[0].x = temp.B[1].x-1;
+                    pt.B[0].y = temp.B[1].y;
+                    pt.B[1].x = temp.B[1].x;
+                    pt.B[1].y = temp.B[1].y;
+                    pt.B[2].x = temp.B[1].x+1;
+                    pt.B[2].y = temp.B[1].y;
+                    pt.depth= temp.depth+1;
+                    pt.state= 0;
+                    visited[0][temp.B[1].y][temp.B[1].x]=true;
+                    Q.push(pt);
+                }flag=true;
+            }
+        }else{
+            if(visited[1][temp.B[1].y][temp.B[1].x]==false){
+                for(int e=0; e<3; e++){
+                    if(temp.B[e].y+1>=N || temp.B[e].y-1<0){
+                        flag=false;
+                        break;
+                    }
+                    if(map[temp.B[e].y+1][temp.B[e].x]==1 || map[temp.B[e].y-1][temp.B[e].x]==1){
+                        flag=false;
+                        break;
+                    }
+                }
+                if(flag){
+                    node pt;
+                    pt.B[0].x = temp.B[1].x;
+                    pt.B[0].y = temp.B[1].y-1;
+                    pt.B[1].x = temp.B[1].x;
+                    pt.B[1].y = temp.B[1].y;
+                    pt.B[2].x = temp.B[1].x;
+                    pt.B[2].y = temp.B[1].y+1;
+                    pt.depth= temp.depth+1;
+                    pt.state= 1;
+                    visited[0][temp.B[1].y][temp.B[1].x]=true;
+                    Q.push(pt);
+                }flag=true;
+            }
+        }
+        
+    }
+    cout << solution;
+    
+    return 0;
+}

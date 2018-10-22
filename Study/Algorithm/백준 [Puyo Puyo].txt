@@ -1,0 +1,113 @@
+//백준 [Puyo Puyo]
+// dfs OR bfs
+
+#include<iostream>
+#include<vector>
+#include<string>
+
+using namespace std;
+int map[12][6]={0,};
+bool visited[12][6]={false,};
+int dx[] = {0,0,-1,1};
+int dy[] = {-1,1,0,0};
+int ck=0;
+bool flag=true;
+int sol =0;
+void print(){
+    for(int r=0; r<12; r++){
+        for(int c=0; c<6; c++){
+            cout << map[r][c] << " ";
+        }cout << "\n";
+    }cout << "\n";
+
+}
+void dfs(int x , int y, int type){
+    ck++;
+    visited[y][x] = true;
+    for(int d=0; d<4; d++){
+        int nx = x+dx[d];
+        int ny = y+dy[d];
+        if( 0<= nx && nx < 6 && 0<=ny && ny <12){
+            if(map[ny][nx]==type && visited[ny][nx] == false){
+                dfs(nx, ny, type);
+            }
+        }
+    }
+}
+void remove_(){
+    for(int r=0; r<12; r++){
+        for(int c=0; c<6; c++){
+            if(visited[r][c]){
+                visited[r][c]=false;
+                map[r][c]=0;
+                flag=true;
+            }
+        }
+    }
+}
+void init_(){
+    for(int r=0; r<12; r++){
+        for(int c=0; c<6; c++){
+            visited[r][c]=false;
+        }
+    }
+}
+void check(){
+    for(int r=0; r<12; r++){
+        for(int c=0; c<6; c++){
+            if(map[r][c]!=0){
+                dfs(c, r, map[r][c]);
+                if(ck >=4){
+                    remove_();
+                }else{
+                    init_();
+                }
+                ck=0;
+            }
+        }
+    }
+}
+void sorting(){
+    vector<int> arr;
+    int idx = 11;
+    for(int c=0; c<6; c++){
+        for(int r=11; r>=0; r--){
+            if(map[r][c] != 0){
+                arr.push_back(map[r][c]);
+                map[r][c]=0;
+            }
+        }
+        for(int i=0; i<arr.size(); i++){
+            map[idx][c]=arr[i];
+            idx--;
+        }
+        arr.clear();
+        idx=11;
+    }
+}
+
+int main(){
+    string temp_str;
+    for(int r=0; r<12; r++){
+        cin>> temp_str;
+        for(int c=0; c<6; c++){
+            if(temp_str[c]=='.'){
+                map[r][c]=0;
+            }else{
+                map[r][c] = temp_str[c]-'A';
+            }
+        }
+    }
+    while(flag){
+        flag=false;
+        check();
+        sorting();
+        if(flag==false)
+            break;
+        //cout << sol <<"\n";
+        //print();
+        sol++;
+    }
+    cout << sol<<"\n";
+    return 0;
+}

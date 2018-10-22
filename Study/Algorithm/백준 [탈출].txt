@@ -1,0 +1,100 @@
+//백준 [탈출]
+
+#include<iostream>
+#include<vector>
+#include<string>
+#include<queue>
+
+using namespace std;
+int map[51][51];
+bool visited[51][51];
+bool wv[51][51];
+int N, M;
+void print(){
+    for(int r=0; r<N; r++){
+        for(int c=0; c<M; c++){
+            cout << map[r][c] << " ";
+        }cout << "\n";
+    }cout << "\n";
+}
+struct node{
+    int x, y,d;
+    node(int x, int y):x(x),y(y){}
+    node(int x, int y,int d):x(x),y(y),d(d){}
+};
+int dx[]={0,0,-1,1};
+int dy[]={-1,1,0,0};
+queue<node> water;
+queue<node> Q;
+void spread(){
+    int len = (int)water.size();
+    for(int i=0; i<len ; i++){
+        node temp = water.front();
+        water.pop();
+        for(int d=0; d<4; d++){
+            int nx = temp.x + dx[d];
+            int ny = temp.y + dy[d];
+            if(0<=nx && nx < M && 0<=ny && ny<N){
+                if(map[ny][nx]==0&&wv[ny][nx]==false){
+                    wv[ny][nx]=true;
+                    map[ny][nx]=-1;
+                    water.push(node(nx,ny));
+                }
+            }
+        }
+    }
+}
+int main(){
+    cin >> N >> M;
+    string temp_str;
+    int X=0, Y=0;
+    for(int r=0; r<N; r++){
+        cin >> temp_str;
+        for(int c=0; c<M; c++){
+            if(temp_str[c]=='D'){
+                map[r][c] = 10;
+                X=c;
+                Y=r;
+            }else if(temp_str[c]=='.'){
+                map[r][c] = 0;
+            }else if(temp_str[c]=='*'){ // water
+                map[r][c] = -1;
+                water.push(node(c,r));
+            }else if(temp_str[c]=='S'){ // start point
+                map[r][c] = 0;
+                Q.push(node(c,r,0));
+            }else if(temp_str[c]=='X'){
+                map[r][c] = -2;
+            }
+        }
+    }
+    visited[Q.front().y][Q.front().x]=true;
+    while(true){
+        int len = (int)Q.size();
+        spread();
+        if(len == 0)
+            break;
+        
+        for(int i=0; i<len; i++){
+            node temp = Q.front();
+            Q.pop();
+            if(temp.x == X && temp.y == Y){
+                cout<<temp.d;
+                return 0;
+            }
+            
+            for(int d=0; d<4; d++){
+                int nx = temp.x + dx[d];
+                int ny = temp.y + dy[d];
+                if(0<=nx && nx < M && 0<=ny && ny<N){
+                    if(visited[ny][nx]==false&&( map[ny][nx]==0|| map[ny][nx]==10)){
+                        visited[ny][nx]=true;
+                        Q.push(node(nx,ny,temp.d+1));
+                    }
+                }
+            }
+        }
+    }
+    cout << "KAKTUS";
+    return 0;
+}

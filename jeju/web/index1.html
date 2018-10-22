@@ -1,3 +1,4 @@
+<!-- 제주 여행 리뷰 -->
 <!DOCTYPE html>  
 <html lang="ko">
   <head>
@@ -66,12 +67,21 @@
     <div class="col-sm-2"></div>
     <div class="col-sm-8" style="background-color: rgba(255,255,255,0.7)">
         <h1 style="padding-bottom: 5px "> Review </h1>
-        <div class="d-flex flex-column bd-highlight mb-3">
-          <div class="p-2 bd-highlight">Flex item 1</div>
-          <div class="p-2 bd-highlight">Flex item 2</div>
-           <div class="p-2 bd-highlight">Flex item 3</div>
-        </div>
-
+        <script>
+          var mysql = require('mysql');
+          /*
+          var connection = mysql.createConnection({
+            host:'localhost',
+            port:3306,
+            user:'root',
+            password:'153624'
+          });
+          connection.connect();
+          connection.query('use tourmaker');
+          connection.query("select content from tweeter where content LIKE '%애월%'");
+          connection.end();
+          */
+        </script>
     </div>
     <div class="col-sm-2">
     </div>
